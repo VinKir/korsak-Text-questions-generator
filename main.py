@@ -93,8 +93,26 @@ def generate_answer():
     print(answers)
 
 
+def get_text_by_url():
+    url = url_entry.get()
+    rs = requests.get(url)
+    root = BeautifulSoup(rs.content, 'html.parser')
+    print(root)
+    paragraphs = root.find_all('p')
+    text_for_viewing = ""
+    for p in paragraphs:
+        text_for_viewing+=p.text
+    text_editor.delete("1.0", END)
+    text_editor.insert("1.0", text_for_viewing)
+
+
 open_button = ttk.Button(text="Открыть файл", command=open_file)
 open_button.grid(column=0, row=2, sticky=NSEW, padx=10)
+
+url_entry = ttk.Entry(text="Открыть статью по ссылке")
+url_entry.grid(column=0, row=3, sticky=NSEW, padx=10)
+open_url_button = ttk.Button(text="Открыть статью по ссылке", command=get_text_by_url)
+open_url_button.grid(column=1, row=3, sticky=NSEW, padx=10)
 
 generate_questions_button = ttk.Button(text="Сгенерировать вопросы", command=generate_questions)
 generate_questions_button.grid(column=2, row=2, sticky=NSEW, padx=10)
